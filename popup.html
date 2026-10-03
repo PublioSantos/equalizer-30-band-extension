@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>Equalizador 30 Bandas</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #1b1b1f;
+    color: #eee;
+    margin: 0;
+    padding: 10px 8px;
+    width: 680px;
+  }
+  h1 {
+    font-size: 14px;
+    margin: 0 0 8px 4px;
+    font-weight: 600;
+  }
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  button {
+    background: #333;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  button:hover { background: #444; }
+  button.active { background: #2e7d32; border-color: #4caf50; }
+  select {
+    background: #333;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+  .fxbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .fx-slider {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .fx-slider.visible { display: flex; }
+  .fx-slider input[type="range"] {
+    width: 120px;
+  }
+  .presetbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .curve-wrap {
+    position: relative;
+    background: #111;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    padding: 4px 2px;
+  }
+  #curve {
+    display: block;
+    width: 100%;
+    height: 150px;
+    cursor: crosshair;
+    border-radius: 4px;
+  }
+  .bands {
+    display: flex;
+    justify-content: space-between;
+    gap: 2px;
+    height: 220px;
+    padding: 4px 2px;
+    background: #111;
+    border-radius: 6px;
+  }
+  .band {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+  }
+  .band input[type="range"] {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    width: 16px;
+    height: 150px;
+    accent-color: #4caf50;
+  }
+  .band .val {
+    font-size: 9px;
+    color: #9c9;
+    margin-top: 2px;
+    height: 12px;
+  }
+  .band .freq {
+    font-size: 8px;
+    color: #999;
+    margin-top: 3px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    height: 32px;
+  }
+  .vu-wrap {
+    background: #111;
+    border-radius: 6px;
+    margin-top: 6px;
+    padding: 4px 2px;
+  }
+  #vu {
+    display: block;
+    width: 100%;
+    height: 60px;
+  }
+</style>
+</head>
+<body>
+  <h1>Equalizador — 30 bandas (±12 dB)</h1>
+  <div class="toolbar">
+    <button id="reset">Resetar</button>
+  </div>
+  <div class="fxbar">
+    <button id="fxGain">Ganho</button>
+    <span class="fx-slider" id="gainSliderWrap">
+      <input type="range" id="gainSlider" min="-24" max="24" step="1" value="0" />
+      <span id="gainSliderVal">0 dB</span>
+    </span>
+    <button id="fxAgc">AGC</button>
+    <button id="fxDolby">Simulador Dolby</button>
+  </div>
+  <div class="presetbar">
+    <select id="presetSelect"><option value="">Curvas salvas…</option></select>
+    <button id="presetLoad">Carregar</button>
+    <button id="presetSave">Salvar curva…</button>
+    <button id="presetDelete">Excluir</button>
+  </div>
+  <div class="curve-wrap">
+    <canvas id="curve" width="660" height="150"></canvas>
+  </div>
+  <div class="bands" id="bands"></div>
+  <div class="vu-wrap">
+    <canvas id="vu" width="660" height="60"></canvas>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Equalizador 30 Bandas",
+  "version": "1.0",
+  "description": "Equalizador de áudio com 30 bandas (25 Hz a 20 kHz), ±12 dB por banda.",
+  "author": "Publio Santos",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Equalizador 30 Bandas"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
