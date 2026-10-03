@@ -200,13 +200,36 @@
     });
   }
 
+  function cleanupElement(el) {
+    const chain = chains.get(el);
+    if (!chain) return;
+    clearInterval(chain.agcTimer);
+    [
+      chain.source, ...chain.filters, chain.masterGain, chain.enhanceShelf, chain.enhanceShaper,
+      chain.splitter, chain.delayL, chain.delayR, chain.merger, chain.agcGain, chain.analyser,
+      ...chain.bandAnalysers,
+    ].forEach((node) => {
+      try { node.disconnect(); } catch (e) {}
+    });
+    chains.delete(el);
+  }
+
   function resumeCtx() {
     if (audioCtx && audioCtx.state === "suspended") {
       audioCtx.resume();
     }
   }
 
-  const observer = new MutationObserver(() => attachAll());
+  const observer = new MutationObserver((mutations) => {
+    attachAll();
+    mutations.forEach((m) => {
+      m.removedNodes.forEach((node) => {
+        if (node.nodeType !== 1) return;
+        if (node.tagName === "AUDIO" || node.tagName === "VIDEO") cleanupElement(node);
+        if (node.querySelectorAll) node.querySelectorAll("audio, video").forEach(cleanupElement);
+      });
+    });
+  });
   observer.observe(document.documentElement, { childList: true, subtree: true });
 
   document.addEventListener("play", (e) => {
