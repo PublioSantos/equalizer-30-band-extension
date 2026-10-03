@@ -28,13 +28,16 @@
     return Math.pow(10, db / 20);
   }
 
-  function makeDolbyCurve(amount = 24) {
+  function makeDolbyCurve(amount = 1.5) {
     const n = 1024;
     const curve = new Float32Array(n);
-    // Unnormalized, this formula's slope at x=0 is (PI+amount)/PI — around
-    // 8.6x (~+19 dB) for amount=24 — so quiet signal would get boosted
-    // instead of just having its peaks softly saturated. Normalize so the
-    // curve passes small signals near unity gain and only compresses peaks.
+    // amount=24 (the original value here) crushes mid-level signal hard —
+    // e.g. a sample at 50% scale comes out near -14 dB — which reads as
+    // heavy distortion, not subtle warmth. A much lower amount keeps the
+    // curve close to linear through the mid range and only softly rounds
+    // off peaks near full scale.
+    // Also normalize so the slope at x=0 is unity gain (quiet signal passes
+    // through unboosted; only peaks get saturated).
     const slopeAtZero = (Math.PI + amount) / Math.PI;
     for (let i = 0; i < n; i++) {
       const x = (i * 2) / n - 1;
