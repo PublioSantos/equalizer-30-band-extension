@@ -6,6 +6,8 @@ Extensão para Chrome que adiciona um equalizador gráfico de 30 bandas em tempo
 
 > Leia em [inglês](README.md).
 
+![Captura de tela do popup](docs/screenshot.png)
+
 ## Funcionalidades
 
 - **30 bandas**, de 25 Hz a 20 kHz, ±6 dB por banda (padrão de equalizador gráfico).

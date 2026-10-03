@@ -6,6 +6,8 @@ A Chrome extension that adds a real-time 30-band graphic equalizer to any audio 
 
 > Read this in [Portuguese](README.pt-BR.md).
 
+![Popup screenshot](docs/screenshot.png)
+
 ## Features
 
 - **30 bands**, 25 Hz to 20 kHz, ±6 dB per band (standard graphic-EQ layout).

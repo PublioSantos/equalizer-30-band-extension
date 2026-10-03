@@ -16,6 +16,15 @@
     font-size: 14px;
     margin: 0 0 8px 4px;
     font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  h1 .byline {
+    font-size: 10px;
+    font-weight: 400;
+    color: #888;
+    margin-right: 4px;
   }
   .toolbar {
     display: flex;
@@ -128,7 +137,7 @@
 </style>
 </head>
 <body>
-  <h1>Equalizador — 30 bandas (±6 dB)</h1>
+  <h1><span>Equalizador — 30 bandas (±6 dB)</span><span class="byline">By PublioSantos</span></h1>
   <div class="toolbar">
     <button id="reset">Resetar</button>
   </div>
