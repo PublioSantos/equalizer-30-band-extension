@@ -8,7 +8,7 @@ Extensão para Chrome que adiciona um equalizador gráfico de 30 bandas em tempo
 
 ## Funcionalidades
 
-- **30 bandas**, de 25 Hz a 20 kHz, ±12 dB por banda (padrão de equalizador gráfico).
+- **30 bandas**, de 25 Hz a 20 kHz, ±6 dB por banda (padrão de equalizador gráfico).
 - **Curva por arraste**: clique e arraste sobre o gráfico para desenhar uma curva — os potenciômetros deslizantes acompanham, com interpolação suave entre bandas.
 - **Presets**: salvar, carregar e excluir curvas de equalização nomeadas.
 - **Ganho (GainNode)**: estágio de ganho manual opcional (-24…+24 dB), aplicado depois do estágio Dolby para não sobrecarregar o saturador.

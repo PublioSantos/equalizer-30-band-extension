@@ -3,8 +3,8 @@ const FREQS = [
   250, 320, 400, 500, 640, 800, 1000, 1300, 1600, 2000,
   2500, 3150, 4000, 5000, 6200, 8000, 10000, 13000, 16000, 20000
 ];
-const MIN_DB = -12;
-const MAX_DB = 12;
+const MIN_DB = -6;
+const MAX_DB = 6;
 
 function fmtFreq(f) {
   if (f >= 1000) {

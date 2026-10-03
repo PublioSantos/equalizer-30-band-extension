@@ -8,7 +8,7 @@ A Chrome extension that adds a real-time 30-band graphic equalizer to any audio 
 
 ## Features
 
-- **30 bands**, 25 Hz to 20 kHz, ±12 dB per band (standard graphic-EQ layout).
+- **30 bands**, 25 Hz to 20 kHz, ±6 dB per band (standard graphic-EQ layout).
 - **Curve drag**: click and drag across the graph to draw a curve — the sliders follow it, with smooth interpolation between bands.
 - **Presets**: save, load and delete named EQ curves.
 - **Master Gain**: optional manual gain stage (-24…+24 dB), applied after the Dolby stage to avoid overdriving it.
