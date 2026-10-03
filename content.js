@@ -14,7 +14,7 @@
 
   let audioCtx = null;
   let gains = new Array(FREQS.length).fill(0);
-  let fx = { masterGainOn: false, masterGainDb: 0, agcOn: false, dolbyOn: false };
+  let fx = { masterGainOn: false, masterGainDb: 0, agcOn: false, enhanceOn: false };
   const chains = new Map(); // mediaElement -> chain
 
   function getCtx() {
@@ -28,7 +28,7 @@
     return Math.pow(10, db / 20);
   }
 
-  function makeDolbyCurve(amount = 1.5) {
+  function makeEnhanceCurve(amount = 1.5) {
     const n = 1024;
     const curve = new Float32Array(n);
     // amount=24 (the original value here) crushes mid-level signal hard —
@@ -45,7 +45,7 @@
     }
     return curve;
   }
-  const DOLBY_CURVE = makeDolbyCurve();
+  const ENHANCE_CURVE = makeEnhanceCurve();
 
   function buildChain(el) {
     if (chains.has(el)) return chains.get(el);
@@ -71,14 +71,14 @@
     const masterGain = ctx.createGain();
     masterGain.gain.value = 1;
 
-    const dolbyShelf = ctx.createBiquadFilter();
-    dolbyShelf.type = "highshelf";
-    dolbyShelf.frequency.value = 8000;
-    dolbyShelf.gain.value = 0;
+    const enhanceShelf = ctx.createBiquadFilter();
+    enhanceShelf.type = "highshelf";
+    enhanceShelf.frequency.value = 8000;
+    enhanceShelf.gain.value = 0;
 
-    const dolbyShaper = ctx.createWaveShaper();
-    dolbyShaper.curve = null;
-    dolbyShaper.oversample = "2x";
+    const enhanceShaper = ctx.createWaveShaper();
+    enhanceShaper.curve = null;
+    enhanceShaper.oversample = "2x";
 
     const splitter = ctx.createChannelSplitter(2);
     const merger = ctx.createChannelMerger(2);
@@ -92,15 +92,15 @@
     const analyser = ctx.createAnalyser();
     analyser.fftSize = 512;
 
-    // chain: source -> filters -> dolbyShelf -> dolbyShaper -> splitter -> (delayL/delayR)
+    // chain: source -> filters -> enhanceShelf -> enhanceShaper -> splitter -> (delayL/delayR)
     //        -> merger -> masterGain -> agcGain -> analyser -> destination
-    // masterGain sits AFTER the Dolby saturation stage so manual gain boosts
+    // masterGain sits AFTER the Enhance saturation stage so manual gain boosts
     // don't overdrive the waveshaper into harsh clipping.
     source.connect(filters[0]);
     for (let i = 0; i < filters.length - 1; i++) filters[i].connect(filters[i + 1]);
-    filters[filters.length - 1].connect(dolbyShelf);
-    dolbyShelf.connect(dolbyShaper);
-    dolbyShaper.connect(splitter);
+    filters[filters.length - 1].connect(enhanceShelf);
+    enhanceShelf.connect(enhanceShaper);
+    enhanceShaper.connect(splitter);
     splitter.connect(delayL, 0);
     splitter.connect(delayR, 1 % splitter.numberOfOutputs);
     delayL.connect(merger, 0, 0);
@@ -111,7 +111,7 @@
     analyser.connect(ctx.destination);
 
     // per-band VU taps: dedicated narrow bandpass filters read from the
-    // final post-processing output (after EQ, Dolby, master gain and AGC),
+    // final post-processing output (after EQ, Enhance, master gain and AGC),
     // so the meter reflects what's actually being sent to the speakers,
     // not the raw signal before those adjustments. They feed only the
     // analysers, never the main output.
@@ -131,7 +131,7 @@
     const agcTimer = setInterval(() => tickAgc(chain), 100);
 
     const chain = {
-      source, filters, masterGain, dolbyShelf, dolbyShaper,
+      source, filters, masterGain, enhanceShelf, enhanceShaper,
       splitter, delayL, delayR, merger, agcGain, analyser, timeData, agcTimer,
       bandAnalysers, bandTimeData,
     };
@@ -185,9 +185,9 @@
 
   function applyFxToChain(chain) {
     chain.masterGain.gain.value = fx.masterGainOn ? dbToLinear(fx.masterGainDb) : 1;
-    chain.dolbyShelf.gain.value = fx.dolbyOn ? 5 : 0;
-    chain.dolbyShaper.curve = fx.dolbyOn ? DOLBY_CURVE : null;
-    chain.delayR.delayTime.value = fx.dolbyOn ? 0.012 : 0;
+    chain.enhanceShelf.gain.value = fx.enhanceOn ? 5 : 0;
+    chain.enhanceShaper.curve = fx.enhanceOn ? ENHANCE_CURVE : null;
+    chain.delayR.delayTime.value = fx.enhanceOn ? 0.012 : 0;
   }
 
   function applyFx() {

@@ -18,7 +18,7 @@ const bandsEl = document.getElementById("bands");
 const canvas = document.getElementById("curve");
 const ctx = canvas.getContext("2d");
 let gains = new Array(FREQS.length).fill(0);
-let fx = { masterGainOn: false, masterGainDb: 0, agcOn: false, dolbyOn: false };
+let fx = { masterGainOn: false, masterGainDb: 0, agcOn: false, enhanceOn: false };
 let sliders = [];
 let vals = [];
 let applyTimer = null;
@@ -217,10 +217,10 @@ document.getElementById("reset").addEventListener("click", () => {
   scheduleApply();
 });
 
-// --- FX: GainNode, AGC, Dolby simulator ---
+// --- FX: GainNode, AGC, Enhance simulator ---
 const fxGainBtn = document.getElementById("fxGain");
 const fxAgcBtn = document.getElementById("fxAgc");
-const fxDolbyBtn = document.getElementById("fxDolby");
+const fxEnhanceBtn = document.getElementById("fxEnhance");
 const gainSliderWrap = document.getElementById("gainSliderWrap");
 const gainSlider = document.getElementById("gainSlider");
 const gainSliderVal = document.getElementById("gainSliderVal");
@@ -243,7 +243,7 @@ function scheduleApplyFx() {
 function renderFxButtons() {
   fxGainBtn.classList.toggle("active", fx.masterGainOn);
   fxAgcBtn.classList.toggle("active", fx.agcOn);
-  fxDolbyBtn.classList.toggle("active", fx.dolbyOn);
+  fxEnhanceBtn.classList.toggle("active", fx.enhanceOn);
   gainSliderWrap.classList.toggle("visible", fx.masterGainOn);
   gainSlider.value = String(fx.masterGainDb);
   gainSliderVal.textContent = `${fx.masterGainDb} dB`;
@@ -259,8 +259,8 @@ fxAgcBtn.addEventListener("click", () => {
   renderFxButtons();
   scheduleApplyFx();
 });
-fxDolbyBtn.addEventListener("click", () => {
-  fx.dolbyOn = !fx.dolbyOn;
+fxEnhanceBtn.addEventListener("click", () => {
+  fx.enhanceOn = !fx.enhanceOn;
   renderFxButtons();
   scheduleApplyFx();
 });
@@ -307,7 +307,7 @@ document.getElementById("presetLoad").addEventListener("click", () => {
     const preset = presets[name];
     if (!preset) return;
     gains = preset.gains.slice();
-    fx = Object.assign({ masterGainOn: false, masterGainDb: 0, agcOn: false, dolbyOn: false }, preset.fx || {});
+    fx = Object.assign({ masterGainOn: false, masterGainDb: 0, agcOn: false, enhanceOn: false }, preset.fx || {});
     updateSlidersFromGains();
     drawCurve();
     renderFxButtons();
