@@ -43,4 +43,4 @@ As configurações são salvas em `chrome.storage.local` e aplicadas em tempo re
 
 ## Licença
 
-Licenciado sob a [GNU General Public License v3.0](LICENSE).
+Licenciado sob a [Licença MIT](LICENSE).

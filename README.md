@@ -43,4 +43,4 @@ Settings are stored in `chrome.storage.local` and applied live to every open tab
 
 ## License
 
-Licensed under the [GNU General Public License v3.0](LICENSE).
+Licensed under the [MIT License](LICENSE).
